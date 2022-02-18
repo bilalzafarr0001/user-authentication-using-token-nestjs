@@ -75,4 +75,12 @@ export class UserController {
 
     return response.status(HttpStatus.OK).json(myToken);
   }
+
+  @Get('/users')
+  async getAllUsers(@Res() response) {
+    const users = await this.userServerice.getAll();
+    return response.status(HttpStatus.OK).json({
+      users: users.users,
+    });
+  }
 }

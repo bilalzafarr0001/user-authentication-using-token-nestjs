@@ -74,4 +74,12 @@ export class UserService {
       myToken: jwt.decode(token),
     };
   }
+  async getAll(): Promise<any> {
+    console.log('getAll Service func call');
+    const allUsers = await this.userModel.find();
+
+    return {
+      users: allUsers,
+    };
+  }
 }
