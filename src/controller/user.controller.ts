@@ -17,7 +17,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { getModelToken } from '@nestjs/mongoose';
 
-@Controller('/api/v1/user')
+@Controller('/v1/user')
 export class UserController {
   constructor(
     private readonly userServerice: UserService,
@@ -81,6 +81,12 @@ export class UserController {
     const users = await this.userServerice.getAll();
     return response.status(HttpStatus.OK).json({
       users: users.users,
+    });
+  }
+  @Get('/test')
+  async test(@Res() response) {
+    return response.status(HttpStatus.OK).json({
+      message: 'Test route',
     });
   }
 }
