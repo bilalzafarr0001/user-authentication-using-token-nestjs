@@ -83,4 +83,10 @@ export class UserController {
       users: users.users,
     });
   }
+  @Get('/test')
+  async test(@Res() response) {
+    return response.status(HttpStatus.OK).json({
+      message: 'Test route',
+    });
+  }
 }
