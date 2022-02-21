@@ -20,7 +20,7 @@ export class TestController {
   @Get('/test')
   async test(@Res() response) {
     return response.status(HttpStatus.OK).json({
-      message: 'Test route',
+      message: 'Test  1233',
     });
   }
 }
