@@ -24,7 +24,7 @@ export class AuthController {
     private readonly jwtService: JwtService,
   ) {}
   @Post('/login')
-  async Signup(@Res() response, @Body() userdet: User) {
+  async login(@Res() response, @Body() userdet: User) {
     const { accessToken, user } = await this.userServerice.signin(
       userdet,
       this.jwtService,
