@@ -4,16 +4,12 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../model/user.schema';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Request, Response, NextFunction } from 'express';
-
-interface UserRequest extends Request {
-  user: any;
-}
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-  async signup(userDet: User, jwt: JwtService): Promise<any> {
+
+  async register(userDet: User, jwt: JwtService): Promise<any> {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(userDet.password, salt);
     const reqBody = {
@@ -22,7 +18,7 @@ export class UserService {
       password: hash,
     };
     const newUser = new this.userModel(reqBody);
-    console.log('User in register ', newUser);
+
     newUser.save();
     const payload = {
       id: newUser._id,
@@ -37,7 +33,7 @@ export class UserService {
     };
   }
 
-  async signin(userDet: User, jwt: JwtService): Promise<any> {
+  async login(userDet: User, jwt: JwtService): Promise<any> {
     const foundUser = await this.userModel
       .findOne({ email: userDet.email })
       .exec();
@@ -67,13 +63,13 @@ export class UserService {
       HttpStatus.UNAUTHORIZED,
     );
   }
-  async verifytoken(token: string, jwt: JwtService): Promise<any> {
-    console.log('token in service file verify function :', token);
-    console.log('decode ', jwt.decode(token));
+
+  async verifyToken(token: string, jwt: JwtService): Promise<any> {
     return {
       myToken: jwt.decode(token),
     };
   }
+
   async getAll(): Promise<any> {
     const allUsers = await this.userModel.find();
 
@@ -94,6 +90,7 @@ export class UserService {
   async update(id, user: User): Promise<User> {
     return await this.userModel.findByIdAndUpdate(id, user, { new: true });
   }
+
   async delete(id): Promise<any> {
     return await this.userModel.findByIdAndRemove(id);
   }

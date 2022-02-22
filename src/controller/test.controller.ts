@@ -1,17 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpStatus,
-  Param,
-  Post,
-  UploadedFiles,
-  Put,
-  Req,
-  Res,
-} from '@nestjs/common';
-import { Request } from 'express';
+import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
 
 @Controller('/')
 export class TestController {

@@ -6,33 +6,26 @@ import {
   HttpStatus,
   Param,
   Post,
-  UploadedFiles,
   Put,
-  Req,
   Res,
 } from '@nestjs/common';
 import { User } from '../model/user.schema';
 import { UserService } from '../service/user.service';
-import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
-import { getModelToken } from '@nestjs/mongoose';
 
 @Controller('/users')
 export class UserController {
-  constructor(
-    private readonly userServerice: UserService,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly userServerice: UserService) {}
 
   @Get('/')
-  async getAllUsers(@Res() response) {
+  async getAll(@Res() response) {
     const users = await this.userServerice.getAll();
     return response.status(HttpStatus.OK).json({
       users: users.users,
     });
   }
+
   @Get('/:id')
-  async findById(@Res() response, @Param('id') id) {
+  async getById(@Res() response, @Param('id') id) {
     const user = await this.userServerice.getById(id);
     return response.status(HttpStatus.OK).json({
       user,
@@ -40,7 +33,7 @@ export class UserController {
   }
 
   @Post()
-  async createUser(@Res() response, @Body() user: User) {
+  async create(@Res() response, @Body() user: User) {
     const newUser = await this.userServerice.create(user);
     return response.status(HttpStatus.CREATED).json({
       newUser,
