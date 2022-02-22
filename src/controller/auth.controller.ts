@@ -31,10 +31,15 @@ export class AuthController {
 
   @Post('/register')
   async register(@Res() response, @Body() userdet: User) {
-    const { accessToken, user } = await this.userService.register(
+    const { accessToken, user, message } = await this.userService.register(
       userdet,
       this.jwtService,
     );
+    if (message) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        message,
+      });
+    }
 
     return response.status(HttpStatus.CREATED).json({ accessToken, user });
   }

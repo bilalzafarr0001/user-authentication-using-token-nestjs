@@ -10,6 +10,14 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async register(userDet: User, jwt: JwtService): Promise<any> {
+    const foundUser = await this.userModel
+      .findOne({ email: userDet.email })
+      .exec();
+    if (foundUser) {
+      return {
+        message: 'User Email Already Exists!',
+      };
+    }
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(userDet.password, salt);
     const reqBody = {
