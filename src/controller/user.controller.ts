@@ -17,76 +17,49 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { getModelToken } from '@nestjs/mongoose';
 
-@Controller('/v1/user')
+@Controller('/users')
 export class UserController {
   constructor(
     private readonly userServerice: UserService,
     private readonly jwtService: JwtService,
   ) {}
-  @Post('/signup')
-  async Signup(@Res() response, @Body() userdet: User) {
-    const { accessToken, user } = await this.userServerice.signup(
-      userdet,
-      this.jwtService,
-    );
-    return response.status(HttpStatus.CREATED).json({
-      accessToken,
-      user,
-    });
-  }
 
-  @Post('/signin')
-  async SignIn(
-    @Req() request: Request,
-    @Res() response,
-    @Body() userdet: User,
-  ) {
-    const { accessToken, user } = await this.userServerice.signin(
-      userdet,
-      this.jwtService,
-    );
-
-    // const myToken = await this.userServerice.verifytoken(
-    //   accessToken,
-    //   this.jwtService,
-    // );
-    console.log('req.headers', request.headers.authorization);
-    return response.status(HttpStatus.OK).json({ accessToken, user });
-  }
-
-  @Post('/verify-token')
-  async VerifyToken(
-    @Req() request: Request,
-    @Res() response,
-    @Body() getToken: string,
-  ) {
-    console.log(
-      'headers in controller verify token is  :',
-      request.headers.authorization,
-    );
-
-    const gettoken = request.headers.authorization;
-    const extractToken = gettoken.slice(7);
-    console.log('GET_TOKEN from headers ', extractToken);
-    const myToken = await this.userServerice.verifytoken(
-      extractToken,
-      this.jwtService,
-    );
-
-    return response.status(HttpStatus.OK).json(myToken);
-  }
-
-  @Get('/users')
+  @Get('/')
   async getAllUsers(@Res() response) {
     const users = await this.userServerice.getAll();
     return response.status(HttpStatus.OK).json({
       users: users.users,
     });
   }
-  @Get('/test')
-  async test(@Res() response) {
+  @Get('/:id')
+  async findById(@Res() response, @Param('id') id) {
+    const user = await this.userServerice.getById(id);
     return response.status(HttpStatus.OK).json({
-      message: 'Test route',
+      user,
+    });
+  }
+
+  @Post()
+  async createUser(@Res() response, @Body() user: User) {
+    const newUser = await this.userServerice.create(user);
+    return response.status(HttpStatus.CREATED).json({
+      newUser,
+    });
+  }
+
+  @Put('/:id')
+  async update(@Res() response, @Param('id') id, @Body() user: User) {
+    const updatedUser = await this.userServerice.update(id, user);
+    return response.status(HttpStatus.OK).json({
+      updatedUser,
+    });
+  }
+
+  @Delete('/:id')
+  async delete(@Res() response, @Param('id') id) {
+    const deletedUser = await this.userServerice.delete(id);
+    return response.status(HttpStatus.OK).json({
+      deletedUser,
     });
   }
 }

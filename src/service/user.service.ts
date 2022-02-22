@@ -75,11 +75,26 @@ export class UserService {
     };
   }
   async getAll(): Promise<any> {
-    console.log('getAll Service func call');
     const allUsers = await this.userModel.find();
 
     return {
       users: allUsers,
     };
+  }
+
+  async getById(id): Promise<User> {
+    return await this.userModel.findById(id).exec();
+  }
+
+  async create(user: User): Promise<User> {
+    const newUser = new this.userModel(user);
+    return newUser.save();
+  }
+
+  async update(id, user: User): Promise<User> {
+    return await this.userModel.findByIdAndUpdate(id, user, { new: true });
+  }
+  async delete(id): Promise<any> {
+    return await this.userModel.findByIdAndRemove(id);
   }
 }

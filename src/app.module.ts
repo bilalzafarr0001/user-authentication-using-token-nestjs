@@ -9,6 +9,7 @@ import { User, UserSchema } from './model/user.schema';
 import { UserService } from './service/user.service';
 import { UserController } from './controller/user.controller';
 import { TestController } from './controller/test.controller';
+import { AuthController } from './controller/auth.controller';
 
 require('dotenv').config();
 const MONGO_URL = process.env.MONGO_URL;
@@ -22,7 +23,7 @@ console.log(MONGO_URL);
       signOptions: { expiresIn: '2h' },
     }),
   ],
-  controllers: [AppController, UserController, TestController],
+  controllers: [AppController, UserController, TestController, AuthController],
   providers: [AppService, UserService],
 })
 export class AppModule {}
