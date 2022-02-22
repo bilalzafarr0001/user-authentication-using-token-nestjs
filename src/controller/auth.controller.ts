@@ -7,13 +7,13 @@ import { Request } from 'express';
 @Controller('/auth')
 export class AuthController {
   constructor(
-    private readonly userServerice: UserService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 
   @Post('/login')
   async login(@Res() response, @Body() userdet: User) {
-    const { accessToken, user } = await this.userServerice.login(
+    const { accessToken, user } = await this.userService.login(
       userdet,
       this.jwtService,
     );
@@ -25,7 +25,7 @@ export class AuthController {
 
   @Post('/register')
   async register(@Res() response, @Body() userdet: User) {
-    const { accessToken, user } = await this.userServerice.register(
+    const { accessToken, user } = await this.userService.register(
       userdet,
       this.jwtService,
     );
@@ -38,7 +38,7 @@ export class AuthController {
     const gettoken = request.headers.authorization;
     const extractToken = gettoken.slice(7);
 
-    const myToken = await this.userServerice.verifyToken(
+    const myToken = await this.userService.verifyToken(
       extractToken,
       this.jwtService,
     );

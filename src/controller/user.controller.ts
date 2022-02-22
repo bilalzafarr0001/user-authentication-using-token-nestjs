@@ -14,11 +14,11 @@ import { UserService } from '../service/user.service';
 
 @Controller('/users')
 export class UserController {
-  constructor(private readonly userServerice: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get('/')
   async getAll(@Res() response) {
-    const users = await this.userServerice.getAll();
+    const users = await this.userService.getAll();
     return response.status(HttpStatus.OK).json({
       users: users.users,
     });
@@ -26,7 +26,7 @@ export class UserController {
 
   @Get('/:id')
   async getById(@Res() response, @Param('id') id) {
-    const user = await this.userServerice.getById(id);
+    const user = await this.userService.getById(id);
     return response.status(HttpStatus.OK).json({
       user,
     });
@@ -34,7 +34,7 @@ export class UserController {
 
   @Post()
   async create(@Res() response, @Body() user: User) {
-    const newUser = await this.userServerice.create(user);
+    const newUser = await this.userService.create(user);
     return response.status(HttpStatus.CREATED).json({
       newUser,
     });
@@ -42,7 +42,7 @@ export class UserController {
 
   @Put('/:id')
   async update(@Res() response, @Param('id') id, @Body() user: User) {
-    const updatedUser = await this.userServerice.update(id, user);
+    const updatedUser = await this.userService.update(id, user);
     return response.status(HttpStatus.OK).json({
       updatedUser,
     });
@@ -50,7 +50,7 @@ export class UserController {
 
   @Delete('/:id')
   async delete(@Res() response, @Param('id') id) {
-    const deletedUser = await this.userServerice.delete(id);
+    const deletedUser = await this.userService.delete(id);
     return response.status(HttpStatus.OK).json({
       deletedUser,
     });
