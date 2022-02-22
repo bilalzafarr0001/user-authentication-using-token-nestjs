@@ -18,7 +18,7 @@ export class UserService {
       password: hash,
     };
     const newUser = new this.userModel(reqBody);
-
+    console.log('User in register ', newUser);
     newUser.save();
     const payload = {
       id: newUser._id,
@@ -53,10 +53,9 @@ export class UserService {
           user: user,
         };
       }
-      return new HttpException(
-        'Incorrect username or password',
-        HttpStatus.UNAUTHORIZED,
-      );
+      return {
+        message: 'Incorrect username or password',
+      };
     }
     return new HttpException(
       'Incorrect username or password',

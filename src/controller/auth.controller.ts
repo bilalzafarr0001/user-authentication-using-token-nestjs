@@ -13,11 +13,17 @@ export class AuthController {
 
   @Post('/login')
   async login(@Res() response, @Body() userdet: User) {
-    const { accessToken, user } = await this.userService.login(
+    const { accessToken, user, message } = await this.userService.login(
       userdet,
       this.jwtService,
     );
-    return response.status(HttpStatus.CREATED).json({
+    if (message) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        message,
+      });
+    }
+
+    return response.status(HttpStatus.OK).json({
       accessToken,
       user,
     });
@@ -30,7 +36,7 @@ export class AuthController {
       this.jwtService,
     );
 
-    return response.status(HttpStatus.OK).json({ accessToken, user });
+    return response.status(HttpStatus.CREATED).json({ accessToken, user });
   }
 
   @Post('/verify-token')
