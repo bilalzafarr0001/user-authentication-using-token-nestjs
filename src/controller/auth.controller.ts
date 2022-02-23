@@ -18,10 +18,11 @@ export class AuthController {
       });
     }
 
-    return response.status(HttpStatus.OK).json({
-      accessToken,
-      user,
-    });
+    // return response.status(HttpStatus.OK).json({
+    //   accessToken,
+    //   user,
+    // });
+    response.status(HttpStatus.OK).send({ accessToken, user });
   }
 
   @Post('/register')
@@ -35,7 +36,8 @@ export class AuthController {
       });
     }
 
-    return response.status(HttpStatus.CREATED).json({ accessToken, user });
+    //return response.status(HttpStatus.CREATED).json({ accessToken, user });
+    response.status(HttpStatus.OK).send({ accessToken, user });
   }
 
   @Post('/verify-token')
