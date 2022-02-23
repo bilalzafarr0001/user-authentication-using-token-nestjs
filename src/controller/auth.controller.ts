@@ -1,22 +1,17 @@
 import { Body, Controller, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { User } from '../model/user.schema';
-import { UserService } from '../service/user.service';
-import { JwtService } from '@nestjs/jwt';
+import { AuthService } from '../service/auth.service';
 import { Request } from 'express';
 
 @Controller('/auth')
 export class AuthController {
   constructor(
-    private readonly userService: UserService,
-    private readonly jwtService: JwtService,
+    private readonly authService: AuthService
   ) {}
 
   @Post('/login')
-  async login(@Res() response, @Body() userdet: User) {
-    const { accessToken, user, message } = await this.userService.login(
-      userdet,
-      this.jwtService,
-    );
+  async login(@Res() response, @Body() userDto: User) {
+    const { accessToken, user, message } = await this.authService.login(userDto);
     if (message) {
       return response.status(HttpStatus.BAD_REQUEST).json({
         message,
@@ -30,11 +25,8 @@ export class AuthController {
   }
 
   @Post('/register')
-  async register(@Res() response, @Body() userdet: User) {
-    const { accessToken, user, message } = await this.userService.register(
-      userdet,
-      this.jwtService,
-    );
+  async register(@Res() response, @Body() userDto: User) {
+    const { accessToken, user, message } = await this.authService.register(userDto);
     if (message) {
       return response.status(HttpStatus.BAD_REQUEST).json({
         message,
@@ -49,10 +41,7 @@ export class AuthController {
     const gettoken = request.headers.authorization;
     const extractToken = gettoken.slice(7);
 
-    const myToken = await this.userService.verifyToken(
-      extractToken,
-      this.jwtService,
-    );
+    const myToken = await this.authService.verifyToken(extractToken,);
 
     return response.status(HttpStatus.OK).json(myToken);
   }
