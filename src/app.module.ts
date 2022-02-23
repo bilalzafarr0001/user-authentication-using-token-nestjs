@@ -10,6 +10,7 @@ import { UserService } from './service/user.service';
 import { UserController } from './controller/user.controller';
 import { TestController } from './controller/test.controller';
 import { AuthController } from './controller/auth.controller';
+import { AuthService } from './service/auth.service';
 
 require('dotenv').config();
 const MONGO_URL = process.env.MONGO_URL;
@@ -24,6 +25,6 @@ console.log(MONGO_URL);
     }),
   ],
   controllers: [AppController, UserController, TestController, AuthController],
-  providers: [AppService, UserService],
+  providers: [AppService, UserService, AuthService],
 })
 export class AppModule {}

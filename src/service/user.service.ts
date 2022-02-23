@@ -7,9 +7,7 @@ import { User, UserDocument } from '../model/user.schema';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  
-
-  async getAll(): Promise<any> {
+  async findAll(): Promise<any> {
     const allUsers = await this.userModel.find();
 
     return {
@@ -17,7 +15,7 @@ export class UserService {
     };
   }
 
-  async getById(id): Promise<User> {
+  async findById(id): Promise<User> {
     return await this.userModel.findById(id).exec();
   }
 
@@ -25,9 +23,8 @@ export class UserService {
     return await this.userModel.findOne({ email: email }).exec();
   }
 
-  async create(user: User): Promise<User> {
-    const newUser = new this.userModel(user);
-    return newUser.save();
+  async create(user: User): Promise<any> {
+    return new this.userModel(user).save();
   }
 
   async update(id, user: User): Promise<User> {

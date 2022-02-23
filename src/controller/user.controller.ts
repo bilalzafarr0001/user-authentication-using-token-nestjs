@@ -18,7 +18,7 @@ export class UserController {
 
   @Get('/')
   async getAll(@Res() response) {
-    const users = await this.userService.getAll();
+    const users = await this.userService.findAll();
     return response.status(HttpStatus.OK).json({
       users: users.users,
     });
@@ -26,7 +26,7 @@ export class UserController {
 
   @Get('/:id')
   async getById(@Res() response, @Param('id') id) {
-    const user = await this.userService.getById(id);
+    const user = await this.userService.findById(id);
     return response.status(HttpStatus.OK).json({
       user,
     });

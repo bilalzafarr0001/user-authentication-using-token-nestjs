@@ -1,4 +1,9 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  ConsoleLogger,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../model/user.schema';
@@ -6,10 +11,9 @@ import { UserService } from '../service/user.service';
 
 @Injectable()
 export class AuthService {
-
   constructor(
     private readonly userService: UserService,
-    private readonly jwt: JwtService
+    private readonly jwt: JwtService,
   ) {}
 
   async register(userDto: User): Promise<any> {
@@ -21,14 +25,21 @@ export class AuthService {
     }
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(userDto.password, salt);
-    const reqBody = {
+    let reqBody = new User();
+    reqBody = {
       username: userDto.username,
       email: userDto.email,
       password: hash,
+      createdDate: Date.now().toString(),
     };
-    const newUser = this.userService.create(reqBody);
-    console.log('User in register ', newUser);
-   // newUser.save();
+
+    const newUser = await this.userService.create(reqBody).then((data) => {
+      console.log('data', data);
+      return data;
+    });
+
+    console.log('user', newUser);
+
     const payload = {
       id: newUser._id,
       username: newUser.username,
@@ -36,6 +47,7 @@ export class AuthService {
     };
     const { email, username, id, createdDate } = newUser;
     const user = { email, username, id, createdDate };
+
     return {
       accessToken: this.jwt.sign(payload),
       user: user,
@@ -48,12 +60,12 @@ export class AuthService {
       const { password } = foundUser;
       if (bcrypt.compare(userDto.password, password)) {
         const payload = {
-          id: foundUser._id,
+          // id: foundUser._id,
           username: foundUser.username,
           email: foundUser.email,
         };
-        const { email, username, id, createdDate } = foundUser;
-        const user = { email, username, id, createdDate };
+        const { email, username, createdDate } = foundUser;
+        const user = { email, username, createdDate };
         console.log('User in login ', user);
         return {
           accessToken: this.jwt.sign(payload),
