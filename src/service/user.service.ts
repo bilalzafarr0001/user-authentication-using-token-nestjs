@@ -24,7 +24,7 @@ export class UserService {
   }
 
   async create(user: User): Promise<any> {
-    return new this.userModel(user).save();
+    return await this.userModel.create(user);
   }
 
   async update(id, user: User): Promise<User> {

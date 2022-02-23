@@ -33,10 +33,7 @@ export class AuthService {
       createdDate: Date.now().toString(),
     };
 
-    const newUser = await this.userService.create(reqBody).then((data) => {
-      console.log('data', data);
-      return data;
-    });
+    const newUser = await this.userService.create(reqBody);
 
     console.log('user', newUser);
 

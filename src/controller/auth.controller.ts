@@ -5,13 +5,13 @@ import { Request } from 'express';
 
 @Controller('/auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
   async login(@Res() response, @Body() userDto: User) {
-    const { accessToken, user, message } = await this.authService.login(userDto);
+    const { accessToken, user, message } = await this.authService.login(
+      userDto,
+    );
     if (message) {
       return response.status(HttpStatus.BAD_REQUEST).json({
         message,
@@ -26,7 +26,9 @@ export class AuthController {
 
   @Post('/register')
   async register(@Res() response, @Body() userDto: User) {
-    const { accessToken, user, message } = await this.authService.register(userDto);
+    const { accessToken, user, message } = await this.authService.register(
+      userDto,
+    );
     if (message) {
       return response.status(HttpStatus.BAD_REQUEST).json({
         message,
@@ -41,7 +43,7 @@ export class AuthController {
     const gettoken = request.headers.authorization;
     const extractToken = gettoken.slice(7);
 
-    const myToken = await this.authService.verifyToken(extractToken,);
+    const myToken = await this.authService.verifyToken(extractToken);
 
     return response.status(HttpStatus.OK).json(myToken);
   }
