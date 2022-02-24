@@ -13,15 +13,11 @@ export class AuthController {
       userDto,
     );
     if (message) {
-      return response.status(HttpStatus.BAD_REQUEST).json({
+      return response.status(HttpStatus.BAD_REQUEST).send({
         message,
       });
     }
 
-    // return response.status(HttpStatus.OK).json({
-    //   accessToken,
-    //   user,
-    // });
     response.status(HttpStatus.OK).send({ accessToken, user });
   }
 
@@ -31,12 +27,10 @@ export class AuthController {
       userDto,
     );
     if (message) {
-      return response.status(HttpStatus.BAD_REQUEST).json({
+      return response.status(HttpStatus.BAD_REQUEST).send({
         message,
       });
     }
-
-    //return response.status(HttpStatus.CREATED).json({ accessToken, user });
     response.status(HttpStatus.OK).send({ accessToken, user });
   }
 
@@ -47,6 +41,6 @@ export class AuthController {
 
     const myToken = await this.authService.verifyToken(extractToken);
 
-    return response.status(HttpStatus.OK).json(myToken);
+    return response.status(HttpStatus.OK).send(myToken);
   }
 }

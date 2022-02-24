@@ -19,25 +19,21 @@ export class UserController {
   @Get('/')
   async getAll(@Res() response) {
     const users = await this.userService.findAll();
-    // return response.status(HttpStatus.OK).json({
-    //   users: users.users,
-    // });
+
     response.status(HttpStatus.OK).send({ users: users.users });
   }
 
   @Get('/:id')
   async getById(@Res() response, @Param('id') id) {
     const user = await this.userService.findById(id);
-    // return response.status(HttpStatus.OK).json({
-    //   user,
-    // });
+
     response.status(HttpStatus.OK).send({ user });
   }
 
   @Post()
   async create(@Res() response, @Body() user: User) {
     const newUser = await this.userService.create(user);
-    return response.status(HttpStatus.CREATED).json({
+    return response.status(HttpStatus.CREATED).send({
       newUser,
     });
   }
@@ -45,18 +41,14 @@ export class UserController {
   @Put('/:id')
   async update(@Res() response, @Param('id') id, @Body() user: User) {
     const updatedUser = await this.userService.update(id, user);
-    // return response.status(HttpStatus.OK).json({
-    //   updatedUser,
-    // });
+
     response.status(HttpStatus.OK).send({ updatedUser });
   }
 
   @Delete('/:id')
   async delete(@Res() response, @Param('id') id) {
     const deletedUser = await this.userService.delete(id);
-    // return response.status(HttpStatus.OK).json({
-    //   deletedUser,
-    // });
+
     response.status(HttpStatus.OK).send({ deletedUser });
   }
 }
